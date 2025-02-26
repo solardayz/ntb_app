@@ -7,6 +7,8 @@ void main() {
 }
 
 class MembershipApp extends StatelessWidget {
+  const MembershipApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,6 +23,8 @@ class MembershipApp extends StatelessWidget {
 }
 
 class MembershipScreen extends StatefulWidget {
+  const MembershipScreen({super.key});
+
   @override
   _MembershipScreenState createState() => _MembershipScreenState();
 }
@@ -187,7 +191,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                 SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Container(
+                  child: SizedBox(
                     height: 200,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,

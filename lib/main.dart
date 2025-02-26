@@ -180,9 +180,9 @@ class _MembershipScreenState extends State<MembershipScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildStatCircle("전체", overallAttendance, Colors.white),
-                    _buildStatCircle("주간", weeklyAttendance, Colors.white),
+                    _buildStatCircle("월간", weeklyAttendance, Colors.white),
                     _buildStatCircle(
-                      "월별",
+                      "주간",
                       monthlyAttendance,
                       Colors.grey[100]!,
                     ),

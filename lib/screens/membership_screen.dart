@@ -110,6 +110,15 @@ class _MembershipScreenState extends State<MembershipScreen> {
               _buildDateSelector(),
               const SizedBox(height: 20),
               _buildStatCircles(),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                height: 2,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.black26, Colors.grey[600]!],
+                  ),
+                ),
+              ),
               const SizedBox(height: 16),
               _buildMonthlyChart(),
               const SizedBox(height: 8),
@@ -121,8 +130,18 @@ class _MembershipScreenState extends State<MembershipScreen> {
                   color: Colors.white,
                 ),
               ),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                height: 2,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.black26, Colors.grey[600]!],
+                  ),
+                ),
+              ),
               const Spacer(),
               _buildButton(),
+
               const Spacer(),
               _buildFooter(),
             ],

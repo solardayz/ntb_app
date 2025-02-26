@@ -240,7 +240,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                       backgroundColor: Colors.grey[700],
                     ),
                     onPressed: () {},
-                    child: Text('출석체크', style: TextStyle(color: Colors.white)),
+                    child: Text('마이엔티비', style: TextStyle(color: Colors.white)),
                   ),
                 ),
                 Spacer(),

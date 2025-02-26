@@ -29,9 +29,63 @@ class _MembershipScreenState extends State<MembershipScreen> {
   final double overallAttendance = 0.75;
   final double weeklyAttendance = 0.60;
   final double monthlyAttendance = 0.80;
-  final List<double> monthlyAttendanceData = [0.8, 0.75, 0.9, 0.6, 0.85, 0.7, 0.8, 0.95, 0.65, 0.9, 0.8, 0.77];
-  final List<String> monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  final List<double> monthlyAttendanceData = [
+    0.8,
+    0.75,
+    0.9,
+    0.6,
+    0.85,
+    0.7,
+    0.8,
+    0.95,
+    0.65,
+    0.9,
+    0.8,
+    0.77,
+  ];
+  final List<String> monthLabels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   DateTime _selectedDate = DateTime.now();
+  List<double> _animationHeights = []; //
+
+  @override
+  void initState() {
+    super.initState();
+    _animationHeights = List.filled(
+      monthlyAttendanceData.length,
+      0.0,
+    ); // 초기 높이를 0으로 설정
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _startAnimations(); // 애니메이션 시작
+  }
+
+  void _startAnimations() {
+    Future.delayed(Duration(milliseconds: 500), () {
+      // 0.5초 딜레이 후 애니메이션 시작
+      setState(() {
+        for (int i = 0; i < monthlyAttendanceData.length; i++) {
+          _animationHeights[i] =
+              monthlyAttendanceData[i] * 150; // 데이터 값까지 높이 설정
+        }
+      });
+    });
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -53,7 +107,14 @@ class _MembershipScreenState extends State<MembershipScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NTB 통합멤버십', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 40)),
+        title: Text(
+          'NTB 통합멤버십',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 40,
+          ),
+        ),
         centerTitle: true,
         backgroundColor: Colors.black,
         elevation: 0,
@@ -76,12 +137,18 @@ class _MembershipScreenState extends State<MembershipScreen> {
                   children: [
                     CircleAvatar(
                       radius: 40,
-                      backgroundImage: NetworkImage('https://pimg.mk.co.kr/meet/neds/2014/10/image_readtop_2014_1274942_14123176891560616.jpg'),
+                      backgroundImage: NetworkImage(
+                        'https://pimg.mk.co.kr/meet/neds/2014/10/image_readtop_2014_1274942_14123176891560616.jpg',
+                      ),
                     ),
                     SizedBox(width: 10),
                     Text(
                       '신종훈',
-                      style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
                   ],
                 ),
@@ -96,7 +163,11 @@ class _MembershipScreenState extends State<MembershipScreen> {
                     ),
                     child: Text(
                       formattedDate,
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
@@ -106,7 +177,11 @@ class _MembershipScreenState extends State<MembershipScreen> {
                   children: [
                     _buildStatCircle("전체", overallAttendance, Colors.white),
                     _buildStatCircle("주간", weeklyAttendance, Colors.grey[700]!),
-                    _buildStatCircle("월별", monthlyAttendance, Colors.grey[500]!),
+                    _buildStatCircle(
+                      "월별",
+                      monthlyAttendance,
+                      Colors.grey[100]!,
+                    ),
                   ],
                 ),
                 SizedBox(height: 16),
@@ -117,22 +192,26 @@ class _MembershipScreenState extends State<MembershipScreen> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: List.generate(monthlyAttendanceData.length, (index) {
-                        double attendance = monthlyAttendanceData[index];
-                        return Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                height: attendance * 150,
-                                width: 10,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[600],
-                                  borderRadius: BorderRadius.circular(5),
+                        return Expanded( // Expanded 위젯을 Row의 자식으로 직접 이동
+                          child: Padding( // Padding 위젯을 Expanded의 자식으로 이동
+                            padding: EdgeInsets.symmetric(horizontal: 0), // 필요에 따라 패딩 조정
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                AnimatedContainer(
+                                  duration: Duration(milliseconds: 1000),
+                                  curve: Curves.easeInOut,
+                                  height: _animationHeights[index],
+                                  width: 10,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[600],
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                 ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(monthLabels[index], style: TextStyle(fontSize: 15, color: Colors.white)),
-                            ],
+                                SizedBox(height: 4),
+                                Text(monthLabels[index], style: TextStyle(fontSize: 15, color: Colors.white)),
+                              ],
+                            ),
                           ),
                         );
                       }),
@@ -140,13 +219,22 @@ class _MembershipScreenState extends State<MembershipScreen> {
                   ),
                 ),
                 SizedBox(height: 8),
-                Text("월별 출석률", style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white)),
+                Text(
+                  "월별 출석률",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
+                ),
                 Spacer(),
                 Container(
                   width: double.infinity,
                   padding: EdgeInsets.all(12),
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey[700]),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey[700],
+                    ),
                     onPressed: () {},
                     child: Text('출석체크', style: TextStyle(color: Colors.white)),
                   ),
@@ -159,7 +247,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                   child: Text(
                     'NTB © 2025',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                    style: TextStyle(fontSize: 12, color: Colors.white),
                   ),
                 ),
               ],
@@ -178,7 +266,14 @@ class _MembershipScreenState extends State<MembershipScreen> {
           radius: 40.0,
           lineWidth: 5.0,
           percent: percent,
-          center: Text("${(percent * 100).toInt()}%", style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white)),
+          center: Text(
+            "${(percent * 100).toInt()}%",
+            style: TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
           progressColor: color,
           backgroundColor: Colors.grey[800]!,
           circularStrokeCap: CircularStrokeCap.round,
@@ -186,7 +281,14 @@ class _MembershipScreenState extends State<MembershipScreen> {
           animationDuration: 1000,
         ),
         SizedBox(height: 4),
-        Text(label, style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold)),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     );
   }

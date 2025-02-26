@@ -53,7 +53,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('NTB 통합멤버십', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 50)),
+        title: Text('NTB 통합멤버십', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 40)),
         centerTitle: true,
         backgroundColor: Colors.black,
         elevation: 0,

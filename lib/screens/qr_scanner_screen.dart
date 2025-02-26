@@ -1,38 +1,33 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QRScannerScreen extends StatefulWidget {
   const QRScannerScreen({Key? key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _QRScannerScreenState();
+  State<QRScannerScreen> createState() => _QRScannerScreenState();
 }
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
-  bool _scanned = false; // 중복 스캔 방지
+  final MobileScannerController _controller = MobileScannerController();
+  bool _isScanned = false; // 중복 스캔 방지
 
   @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller?.pauseCamera();
-    }
-    controller?.resumeCamera();
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      if (!_scanned) {
-        _scanned = true;
-        controller.pauseCamera();
-        Navigator.pop(context, scanData.code);
+  // mobile_scanner 6.0.6 에서는 onDetect 콜백의 인자로 BarcodeCapture를 받습니다.
+  void _onDetect(BarcodeCapture capture) {
+    if (!_isScanned && capture.barcodes.isNotEmpty) {
+      final Barcode barcode = capture.barcodes.first;
+      final String? code = barcode.rawValue;
+      if (code != null) {
+        _isScanned = true;
+        Navigator.pop(context, code);
       }
-    });
+    }
   }
 
   @override
@@ -42,16 +37,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         title: const Text("QR 스캔"),
         backgroundColor: Colors.black,
       ),
-      body: QRView(
-        key: qrKey,
-        onQRViewCreated: _onQRViewCreated,
+      body: MobileScanner(
+        controller: _controller,
+        onDetect: _onDetect,
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    controller?.dispose();
-    super.dispose();
   }
 }

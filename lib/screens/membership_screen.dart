@@ -93,6 +93,8 @@ class _MembershipScreenState extends State<MembershipScreen> {
         backgroundColor: Colors.black,
         elevation: 0,
       ),
+      // footer를 bottomNavigationBar에 넣어 고정시킵니다.
+      bottomNavigationBar: _buildFooter(),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -102,40 +104,37 @@ class _MembershipScreenState extends State<MembershipScreen> {
           ),
         ),
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildProfileSection(),
-                const SizedBox(height: 20),
-                _buildDateSelector(),
-                const SizedBox(height: 20),
-                _buildStatCircles(),
-                const SizedBox(height: 12),
-                _buildDivider(),
-                const SizedBox(height: 16),
-                _buildMonthlyChart(),
-                const SizedBox(height: 8),
-                const Text(
-                  "월별 출석률",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildProfileSection(),
+              const SizedBox(height: 20),
+              _buildDateSelector(),
+              const SizedBox(height: 20),
+              _buildStatCircles(),
+              const SizedBox(height: 12),
+              _buildDivider(),
+              const SizedBox(height: 16),
+              _buildMonthlyChart(),
+              const SizedBox(height: 8),
+              const Text(
+                "월별 출석률",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
                 ),
-                const SizedBox(height: 8),
-                _buildDivider(),
-                const SizedBox(height: 8),
-                _buildAttendanceCheckButton(), // 출석 체크 버튼
-                // const SizedBox(height: 4),
-                _buildButton(), // 마이엔티비 버튼
-                const SizedBox(height: 8),
-                _buildFooter(),
-              ],
-            ),
+              ),
+              const SizedBox(height: 12),
+              _buildDivider(),
+              const SizedBox(height: 16),
+              _buildAttendanceCheckButton(), // 출석 체크 버튼
+              const SizedBox(height: 16),
+              _buildButton(), // 마이엔티비 버튼
+              const SizedBox(height: 16),
+            ],
           ),
         ),
       ),
@@ -256,19 +255,6 @@ class _MembershipScreenState extends State<MembershipScreen> {
     );
   }
 
-  Widget _buildFooter() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
-      color: Colors.grey[900],
-      child: const Text(
-        'NTB © 2025',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 12, color: Colors.white),
-      ),
-    );
-  }
-
   Widget _buildDivider() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12.0),
@@ -277,6 +263,18 @@ class _MembershipScreenState extends State<MembershipScreen> {
         gradient: LinearGradient(
           colors: [Colors.black26, Colors.grey[600]!],
         ),
+      ),
+    );
+  }
+
+  Widget _buildFooter() {
+    return Container(
+      color: Colors.grey[900],
+      padding: const EdgeInsets.all(12),
+      child: const Text(
+        'NTB © 2025',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 20, color: Colors.white),
       ),
     );
   }

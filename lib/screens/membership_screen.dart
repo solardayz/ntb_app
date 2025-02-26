@@ -101,50 +101,41 @@ class _MembershipScreenState extends State<MembershipScreen> {
             colors: [Colors.black, Colors.grey[700]!],
           ),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12.0),
-          child: Column(
-            children: [
-              _buildProfileSection(),
-              const SizedBox(height: 20),
-              _buildDateSelector(),
-              const SizedBox(height: 20),
-              _buildStatCircles(),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                height: 2,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.black26, Colors.grey[600]!],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _buildProfileSection(),
+                const SizedBox(height: 20),
+                _buildDateSelector(),
+                const SizedBox(height: 20),
+                _buildStatCircles(),
+                const SizedBox(height: 12),
+                _buildDivider(),
+                const SizedBox(height: 16),
+                _buildMonthlyChart(),
+                const SizedBox(height: 8),
+                const Text(
+                  "월별 출석률",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              _buildMonthlyChart(),
-              const SizedBox(height: 8),
-              const Text(
-                "월별 출석률",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-                height: 2,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.black26, Colors.grey[600]!],
-                  ),
-                ),
-              ),
-              const Spacer(),
-              _buildButton(),
-
-              const Spacer(),
-              _buildFooter(),
-            ],
+                const SizedBox(height: 8),
+                _buildDivider(),
+                const SizedBox(height: 8),
+                _buildAttendanceCheckButton(), // 출석 체크 버튼
+                // const SizedBox(height: 4),
+                _buildButton(), // 마이엔티비 버튼
+                const SizedBox(height: 8),
+                _buildFooter(),
+              ],
+            ),
           ),
         ),
       ),
@@ -177,22 +168,19 @@ class _MembershipScreenState extends State<MembershipScreen> {
   Widget _buildDateSelector() {
     return GestureDetector(
       onTap: () => _selectDate(context),
-      child: SizedBox(
-        width: double.infinity,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          decoration: BoxDecoration(
-            color: Colors.grey[900],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            formattedDate,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-              color: Colors.white,
-            ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.grey[900],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          formattedDate,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
           ),
         ),
       ),
@@ -223,11 +211,28 @@ class _MembershipScreenState extends State<MembershipScreen> {
   }
 
   Widget _buildMonthlyChart() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: MonthlyChart(
-        monthLabels: monthLabels,
-        animationHeights: _animationHeights,
+    return MonthlyChart(
+      monthLabels: monthLabels,
+      animationHeights: _animationHeights,
+    );
+  }
+
+  Widget _buildAttendanceCheckButton() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blueGrey,
+        ),
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text("출석 체크 완료!"),
+            ),
+          );
+        },
+        child: const Text('출석 체크', style: TextStyle(color: Colors.white)),
       ),
     );
   }
@@ -260,6 +265,18 @@ class _MembershipScreenState extends State<MembershipScreen> {
         'NTB © 2025',
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 12, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12.0),
+      height: 2,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.black26, Colors.grey[600]!],
+        ),
       ),
     );
   }

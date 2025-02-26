@@ -128,7 +128,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.black, Colors.grey[900]!],
+            colors: [Colors.black, Colors.grey[700]!],
           ),
         ),
         child: Padding(
@@ -180,7 +180,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     _buildStatCircle("전체", overallAttendance, Colors.white),
-                    _buildStatCircle("주간", weeklyAttendance, Colors.grey[700]!),
+                    _buildStatCircle("주간", weeklyAttendance, Colors.white),
                     _buildStatCircle(
                       "월별",
                       monthlyAttendance,
@@ -208,7 +208,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
                                   height: _animationHeights[index],
                                   width: 10,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[600],
+                                    color: Colors.grey[400],
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                 ),
@@ -273,7 +273,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
           center: Text(
             "${(percent * 100).toInt()}%",
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               color: Colors.white,
             ),

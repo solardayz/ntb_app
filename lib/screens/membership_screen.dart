@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../widgets/stat_circle.dart';
 import '../widgets/monthly_chart.dart';
+import 'user_screen.dart';
 
 class MembershipScreen extends StatefulWidget {
   const MembershipScreen({super.key});
@@ -56,10 +57,10 @@ class _MembershipScreenState extends State<MembershipScreen> {
         return Theme(
           data: ThemeData.dark().copyWith(
             colorScheme: ColorScheme.dark(
-              primary: Colors.teal,         // 헤더 배경 색상
-              onPrimary: Colors.white,        // 헤더 텍스트 색상
-              surface: Colors.grey[850]!,      // 달력 배경 색상
-              onSurface: Colors.white,        // 달력 텍스트 색상
+              primary: Colors.teal,
+              onPrimary: Colors.white,
+              surface: Colors.grey[850]!,
+              onSurface: Colors.white,
             ),
             dialogBackgroundColor: Colors.grey[800],
           ),
@@ -220,7 +221,12 @@ class _MembershipScreenState extends State<MembershipScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.grey[700],
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const UserScreen()),
+          );
+        },
         child: const Text('마이엔티비', style: TextStyle(color: Colors.white)),
       ),
     );

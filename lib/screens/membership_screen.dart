@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../widgets/stat_circle.dart';
 import '../widgets/monthly_chart.dart';
+import 'qr_scanner_screen.dart';  // QR 스캐너 화면 import
 import 'user_screen.dart';
 
 class MembershipScreen extends StatefulWidget {
@@ -93,7 +94,6 @@ class _MembershipScreenState extends State<MembershipScreen> {
         backgroundColor: Colors.black,
         elevation: 0,
       ),
-      // footer를 bottomNavigationBar에 넣어 고정시킵니다.
       bottomNavigationBar: _buildFooter(),
       body: Container(
         decoration: BoxDecoration(
@@ -130,7 +130,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
               const SizedBox(height: 12),
               _buildDivider(),
               const SizedBox(height: 16),
-              _buildAttendanceCheckButton(), // 출석 체크 버튼
+              _buildAttendanceCheckButton(), // 출석 체크 버튼 (QR 스캔)
               const SizedBox(height: 16),
               _buildButton(), // 마이엔티비 버튼
               const SizedBox(height: 16),
@@ -224,12 +224,27 @@ class _MembershipScreenState extends State<MembershipScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blueGrey,
         ),
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("출석 체크 완료!"),
-            ),
+        onPressed: () async {
+          // QR 스캐너 화면으로 이동
+          final scannedData = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const QRScannerScreen()),
           );
+          if (scannedData != null) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text("QR 코드 스캔 결과"),
+                content: Text(scannedData.toString()),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text("확인"),
+                  ),
+                ],
+              ),
+            );
+          }
         },
         child: const Text('출석 체크', style: TextStyle(color: Colors.white)),
       ),
@@ -274,7 +289,7 @@ class _MembershipScreenState extends State<MembershipScreen> {
       child: const Text(
         'NTB © 2025',
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 20, color: Colors.white),
+        style: TextStyle(fontSize: 12, color: Colors.white),
       ),
     );
   }

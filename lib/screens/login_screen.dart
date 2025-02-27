@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'membership_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,23 +22,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() {
     if (_formKey.currentState!.validate()) {
-      // 예제: 콘솔에 로그인 정보 출력 및 스낵바 표시
-      debugPrint("Email: ${_emailController.text}, Password: ${_passwordController.text}");
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('로그인 성공!')),
+      // 여기에 실제 로그인 API 호출 등을 추가할 수 있습니다.
+      // 예제에서는 로그인 성공 시 대시보드(MembershipScreen)로 전환합니다.
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MembershipScreen()),
       );
-      // 실제 로그인 로직 및 화면 전환 로직 추가 가능
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 전체 배경에 심플한 그라데이션 적용
+      // 배경 그라데이션을 사용하여 심플한 로그인 화면 구성
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.black26, Colors.grey.shade50],
+            colors: [Colors.black26, Colors.grey.shade400],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),

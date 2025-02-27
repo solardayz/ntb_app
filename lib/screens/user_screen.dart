@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'change_password_screen.dart'; // 만약 패스워드 변경 화면이 있다면
+import 'change_password_screen.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -9,6 +9,11 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+  // 사용자 데이터 (예시)
+  String name = "신종훈";
+  String email = "user@example.com";
+  String phone = "010-1234-5678";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,73 +25,122 @@ class _UserScreenState extends State<UserScreen> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
+            colors: [Colors.black, Colors.grey.shade800],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.black, Colors.grey.shade700],
           ),
         ),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage(
-                  'https://pimg.mk.co.kr/meet/neds/2014/10/image_readtop_2014_1274942_14123176891560616.jpg',
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // 프로필 사진 및 편집 아이콘 오버레이
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    const CircleAvatar(
+                      radius: 60,
+                      backgroundImage: NetworkImage(
+                        'https://pimg.mk.co.kr/meet/neds/2014/10/image_readtop_2014_1274942_14123176891560616.jpg',
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 4,
+                      right: 4,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blueGrey,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        child: const Icon(
+                          Icons.edit,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                "신종훈",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                const SizedBox(height: 16),
+                Text(
+                  name,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                "user@example.com",
-                style: TextStyle(fontSize: 18, color: Colors.white70),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                "010-1234-5678",
-                style: TextStyle(fontSize: 18, color: Colors.white70),
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  // 패스워드 변경 화면 이동 (있다면)
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ChangePasswordScreen()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey.shade700,
-                  minimumSize: const Size.fromHeight(50),
+                const SizedBox(height: 8),
+                // 사용자 정보를 카드 형태로 표시
+                Card(
+                  color: Colors.grey.shade900,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 24,
+                    ),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: const Icon(Icons.email, color: Colors.white70),
+                          title: Text(
+                            email,
+                            style: const TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        ListTile(
+                          leading: const Icon(Icons.phone, color: Colors.white70),
+                          title: Text(
+                            phone,
+                            style: const TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                child: const Text(
-                  "패스워드 변경",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                const SizedBox(height: 32),
+                // 패스워드 변경 버튼
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ChangePasswordScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey.shade700,
+                    minimumSize: const Size.fromHeight(50),
+                  ),
+                  child: const Text(
+                    "패스워드 변경",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey.shade700,
-                  minimumSize: const Size.fromHeight(50),
+                const SizedBox(height: 16),
+                // 뒤로가기 버튼
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey.shade700,
+                    minimumSize: const Size.fromHeight(50),
+                  ),
+                  child: const Text(
+                    "뒤로가기",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
-                child: const Text(
-                  "뒤로가기",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

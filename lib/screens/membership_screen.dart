@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 import '../widgets/stat_circle.dart';
 import '../widgets/monthly_chart.dart';
-import 'qr_scanner_screen.dart';  // QR 스캐너 화면 import
+import 'qr_scanner_screen.dart';
 import 'user_screen.dart';
 
 class MembershipScreen extends StatefulWidget {
@@ -78,67 +81,62 @@ class _MembershipScreenState extends State<MembershipScreen> {
 
   String get formattedDate => DateFormat('yyyy-MM-dd').format(_selectedDate);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'NTB 통합멤버십',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 40,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.black,
-        elevation: 0,
-      ),
-      bottomNavigationBar: _buildFooter(),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Colors.black, Colors.grey[700]!],
-          ),
-        ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildProfileSection(),
-              const SizedBox(height: 20),
-              _buildDateSelector(),
-              const SizedBox(height: 20),
-              _buildStatCircles(),
-              const SizedBox(height: 12),
-              _buildDivider(),
-              const SizedBox(height: 16),
-              _buildMonthlyChart(),
-              const SizedBox(height: 8),
-              const Text(
-                "월별 출석률",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+  // QR 스캔 후 서버에 데이터를 전송하는 함수
+  Future<void> _sendQRDataToServer(String qrData) async {
+    final url = Uri.parse("https://example.com/api/qr-scan");
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'qrData': qrData}),
+      );
+      if (response.statusCode == 200) {
+        // 성공 응답 처리
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("서버 응답"),
+            content: Text("성공: ${response.body}"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("확인"),
               ),
-              const SizedBox(height: 12),
-              _buildDivider(),
-              const SizedBox(height: 16),
-              _buildAttendanceCheckButton(), // 출석 체크 버튼 (QR 스캔)
-              const SizedBox(height: 16),
-              _buildButton(), // 마이엔티비 버튼
-              const SizedBox(height: 16),
             ],
           ),
+        );
+      } else {
+        // 에러 응답 처리
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text("서버 응답"),
+            content: Text("오류: ${response.statusCode}"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("확인"),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      // 네트워크 에러 처리
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("오류"),
+          content: Text("네트워크 오류: $e"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("확인"),
+            ),
+          ],
         ),
-      ),
-    );
+      );
+    }
   }
 
   Widget _buildProfileSection() {
@@ -210,9 +208,12 @@ class _MembershipScreenState extends State<MembershipScreen> {
   }
 
   Widget _buildMonthlyChart() {
-    return MonthlyChart(
-      monthLabels: monthLabels,
-      animationHeights: _animationHeights,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: MonthlyChart(
+        monthLabels: monthLabels,
+        animationHeights: _animationHeights,
+      ),
     );
   }
 
@@ -225,25 +226,14 @@ class _MembershipScreenState extends State<MembershipScreen> {
           backgroundColor: Colors.blueGrey,
         ),
         onPressed: () async {
-          // QR 스캐너 화면으로 이동
+          // QR 스캔 화면으로 이동 후 스캔 결과 받기
           final scannedData = await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const QRScannerScreen()),
           );
           if (scannedData != null) {
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text("QR 코드 스캔 결과"),
-                content: Text(scannedData.toString()),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text("확인"),
-                  ),
-                ],
-              ),
-            );
+            // 스캔 결과를 서버로 전송하는 로직 실행
+            await _sendQRDataToServer(scannedData.toString());
           }
         },
         child: const Text('출석 체크', style: TextStyle(color: Colors.white)),
@@ -290,6 +280,69 @@ class _MembershipScreenState extends State<MembershipScreen> {
         'NTB © 2025',
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 12, color: Colors.white),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'NTB 통합멤버십',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 40,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.black,
+        elevation: 0,
+      ),
+      bottomNavigationBar: _buildFooter(),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Colors.black, Colors.grey[700]!],
+          ),
+        ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildProfileSection(),
+              const SizedBox(height: 20),
+              _buildDateSelector(),
+              const SizedBox(height: 20),
+              _buildStatCircles(),
+              const SizedBox(height: 12),
+              _buildDivider(),
+              const SizedBox(height: 16),
+              _buildMonthlyChart(),
+              const SizedBox(height: 8),
+              const Text(
+                "월별 출석률",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildDivider(),
+              const SizedBox(height: 16),
+              _buildAttendanceCheckButton(),
+              const SizedBox(height: 16),
+              _buildButton(),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
       ),
     );
   }

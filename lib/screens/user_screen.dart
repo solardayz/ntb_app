@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'change_password_screen.dart';
+import 'change_password_screen.dart'; // 만약 패스워드 변경 화면이 있다면
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -25,7 +25,7 @@ class _UserScreenState extends State<UserScreen> {
             colors: [Colors.black, Colors.grey.shade700],
           ),
         ),
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
@@ -54,23 +54,22 @@ class _UserScreenState extends State<UserScreen> {
                 "010-1234-5678",
                 style: TextStyle(fontSize: 18, color: Colors.white70),
               ),
-              const Spacer(),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  // 패스워드 변경 화면으로 이동
+                  // 패스워드 변경 화면 이동 (있다면)
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const ChangePasswordScreen(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const ChangePasswordScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey.shade700,
+                  minimumSize: const Size.fromHeight(50),
                 ),
                 child: const Text(
                   "패스워드 변경",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
               const SizedBox(height: 16),
@@ -80,10 +79,11 @@ class _UserScreenState extends State<UserScreen> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey.shade700,
+                  minimumSize: const Size.fromHeight(50),
                 ),
                 child: const Text(
                   "뒤로가기",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ],

@@ -41,8 +41,8 @@ class StatCircle extends StatelessWidget {
           label,
           style: const TextStyle(
             fontSize: 20,
-            color: Colors.white,
             fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
       ],

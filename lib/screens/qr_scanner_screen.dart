@@ -10,7 +10,7 @@ class QRScannerScreen extends StatefulWidget {
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
   final MobileScannerController _controller = MobileScannerController();
-  bool _isScanned = false; // 중복 스캔 방지
+  bool _isScanned = false;
 
   @override
   void dispose() {
@@ -18,10 +18,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     super.dispose();
   }
 
-  // mobile_scanner 6.0.6 에서는 onDetect 콜백의 인자로 BarcodeCapture를 받습니다.
   void _onDetect(BarcodeCapture capture) {
     if (!_isScanned && capture.barcodes.isNotEmpty) {
-      final Barcode barcode = capture.barcodes.first;
+      final barcode = capture.barcodes.first;
       final String? code = barcode.rawValue;
       if (code != null) {
         _isScanned = true;

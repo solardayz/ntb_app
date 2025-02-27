@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'membership_screen.dart';
+import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -22,8 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _login() {
     if (_formKey.currentState!.validate()) {
-      // 여기에 실제 로그인 API 호출 등을 추가할 수 있습니다.
-      // 예제에서는 로그인 성공 시 대시보드(MembershipScreen)로 전환합니다.
+      // 실제 로그인 로직을 추가할 수 있음.
+      // 로그인 성공 시 대시보드(여기서는 MembershipScreen)로 전환.
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const MembershipScreen()),
@@ -34,11 +35,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 배경 그라데이션을 사용하여 심플한 로그인 화면 구성
+      // 그라데이션 배경
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.black26, Colors.grey.shade400],
+            colors: [Colors.blue, Colors.lightBlueAccent],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -121,6 +122,20 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text(
                       "로그인",
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () {
+                      // 회원가입 화면으로 이동
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SignupScreen()),
+                      );
+                    },
+                    child: const Text(
+                      "회원가입",
+                      style: TextStyle(fontSize: 16, color: Colors.white),
                     ),
                   ),
                 ],

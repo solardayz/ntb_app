@@ -33,8 +33,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("QR 스캔"),
+        title: const Text("QR 스캔", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white)
       ),
       body: MobileScanner(
         controller: _controller,

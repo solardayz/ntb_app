@@ -18,9 +18,10 @@ class _UserScreenState extends State<UserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("사용자 정보"),
+        title: const Text("사용자 정보", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -121,21 +122,6 @@ class _UserScreenState extends State<UserScreen> {
                   ),
                   child: const Text(
                     "패스워드 변경",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                // 뒤로가기 버튼
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey.shade700,
-                    minimumSize: const Size.fromHeight(50),
-                  ),
-                  child: const Text(
-                    "뒤로가기",
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
